@@ -16,13 +16,24 @@ function Uploader() {
             const img = new Image();
             img.src = image;
             img.onload = () => {
-                // Canvas boyutlarını ayarla
-                canvas.width = img.width;
-                canvas.height = img.height;
-                // Resmi canvas'a çiz
-                ctx.drawImage(img, 0, 0);
-                // Canvas'a çizimin gerçekleştiğini kontrol et
-                console.log("Resim canvas üzerine çizildi.");
+
+               // Orijinal resim boyutları
+            const originalWidth = img.width;
+            const originalHeight = img.height;
+
+            // Küçültülmüş boyutları belirleme (örneğin, %50 küçültme)
+            const scaleFactor = 0.5; // %50 küçültme
+            const newWidth = originalWidth * scaleFactor;
+            const newHeight = originalHeight * scaleFactor;
+
+            // Canvas boyutlarını ayarla
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            // Resmi canvas'a çiz
+            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            // Canvas'a çizimin gerçekleştiğini kontrol et
+            console.log("Küçültülmüş resim canvas üzerine çizildi.");
             };
         }
     }, [image]);
