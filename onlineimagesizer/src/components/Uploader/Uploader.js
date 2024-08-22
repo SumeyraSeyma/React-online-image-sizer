@@ -48,32 +48,6 @@ function Uploader() {
                 height:imageData.height
             };
 
-             // Resmi sıkıştırma ve kodlama işlemleri
-    const { encodedData, compression_ratio, binaryEnocded } = encode(imageData.data);
-
-    // Kodlanmış veriyi sakla
-    try {
-        localStorage.setItem('encodedData', JSON.stringify(encodedData));
-        localStorage.setItem('compression_ratio', JSON.stringify(compression_ratio));
-        localStorage.setItem('binaryEnocded', JSON.stringify(binaryEnocded));
-        console.log('Veri başarıyla kodlandı ve saklandı.');
-    } catch (e) {
-        if (e.code === 22) {
-            console.error('Veri boyutu depolama sınırını aştı. Veriyi kaydedemedim.');
-        } else {
-            console.error('Beklenmedik bir hata oluştu:', e);
-        }
-    }
-
-    // Decode data
-const decodedData = decode(encodedData);
-
-console.log('Compression Ratio', compression_ratio)
-console.log('Binary Encoded Data', binaryEnocded)
-console.log('Original Data:', dataToEncode);
-console.log('Encoded Data:', encodedData);
-console.log('Decoded Data:', decodedData);
-
 
             };
         }
@@ -81,8 +55,7 @@ console.log('Decoded Data:', decodedData);
         
     }, [image]);
     
-   
-    
+
 
     const handleDelete = () => {
         if (image) {
@@ -99,6 +72,26 @@ console.log('Decoded Data:', decodedData);
         } else {
             setIsDisabled(true);
             toast.error('No file selected to delete', {
+                position: 'bottom-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    };
+
+    const downloadImage = () => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = `${fileName}-resized.png`;
+            link.click();
+        } else {
+            toast.error('No image available to download', {
                 position: 'bottom-right',
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -151,6 +144,11 @@ console.log('Decoded Data:', decodedData);
                 />
             </span>
         </section>
+
+        <button onClick={downloadImage} disabled={!image} className="download-button">
+                Download Resized Image
+        </button>
+
 
     </main>
   );

@@ -24,3 +24,11 @@ form{
     display: flex;
     align-items: center;
 }
+
+.download-button{
+    background-color: #1475cf;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
