@@ -2,16 +2,21 @@ import React,{useState,useEffect,useRef} from 'react'
 import './Uploader.css'
 import { MdCloudUpload,MdDelete } from 'react-icons/md'
 import {AiFillFileImage} from 'react-icons/ai'
+import { toast } from 'react-toastify';
 
 function Uploader() {
     const [image,setImage] = useState(null)
     const [fileName,setFileName] = useState('No selected file')
+    const [isDisabled,setIsDisabled] = useState(false)
+
     const canvasRef = useRef(null); // Canvas referansı oluşturuldu
+
 
     // Resim yüklendiğinde canvas'a çizme işlemini gerçekleştiren useEffect
     useEffect(() => {
         if (image) {
             const canvas = canvasRef.current;
+            if (canvas) {
             const ctx = canvas.getContext('2d');
             const img = new Image();
             img.src = image;
@@ -34,20 +39,30 @@ function Uploader() {
             ctx.drawImage(img, 0, 0, newWidth, newHeight) ;
 
             const imageData = ctx.getImageData(0, 0, newWidth, newHeight);
-            const iamgeObject ={
-                data:imageData.data,
+            const imageObject ={
+                data:Array.from(imageData.data),
                 width:imageData.width,
                 height:imageData.height
-            }
+            };
 
             // Resmi küçültülmüş halde sakla
-            localStorage.setItem('image', JSON.stringify(iamgeObject));
-            
 
-            // Canvas'a çizimin gerçekleştiğini kontrol et
-            console.log("Küçültülmüş resim canvas üzerine çizildi.");
+            try {
+                localStorage.setItem('image', JSON.stringify(imageObject));
+                console.log('Veri başarıyla kaydedildi.');
+            } catch (e) {
+                if (e.code === 22) {
+                    console.error('Veri boyutu depolama sınırını aştı. Veriyi kaydedemedim.');
+                } else {
+                    console.error('Beklenmedik bir hata oluştu:', e);
+                }
+            }
+
+
             };
         }
+    }
+        
     }, [image]);
 
   return (
@@ -84,13 +99,35 @@ function Uploader() {
                 {fileName}
                 <MdDelete
                 size={30}
+                style={{cursor: isDisabled ? 'not-allowed' : 'pointer',}}
                 onClick={()=>{
-                    setImage(null)
-                    setFileName('No selected file');
-                    // Canvas'ı temizlemek için
-                    const canvas = canvasRef.current;
-                    const ctx = canvas.getContext('2d');
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    if(image){
+                        setImage(null)
+                        setFileName('No selected file');
+                        // Canvas'ı temizlemek için
+                        const canvas = canvasRef.current;
+
+                    if(canvas){
+                        const ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                    else{
+                        setIsDisabled(true);
+                        toast.error('No file selected to delete',
+                        {
+                            position: 'bottom-right',
+                            autoClose: 2000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        }
+                        );
+                    }
+                    }
+
+                   
                 }}
                 />
             </span>
