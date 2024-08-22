@@ -67,6 +67,32 @@ function Uploader() {
         
     }, [image]);
 
+    const handleDelete = () => {
+        if (image) {
+            setImage(null);
+            setFileName('No selected file');
+            setIsDisabled(false);
+
+            // Canvas'ı temizlemek için
+            const canvas = canvasRef.current;
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        } else {
+            setIsDisabled(true);
+            toast.error('No file selected to delete', {
+                position: 'bottom-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    };
+
   return (
     <main>
         <form
@@ -80,6 +106,7 @@ function Uploader() {
             if (files && files[0]) {
                 setFileName(files[0].name);
                 setImage(URL.createObjectURL(files[0]));
+                setIsDisabled(false);
             }
         }}
         />
@@ -102,35 +129,8 @@ function Uploader() {
                 <MdDelete
                 size={30}
                 style={{cursor: !isDisabled ? 'not-allowed' : 'pointer',}}
-                onClick={()=>{
-                    if(image){
-                        setImage(null)
-                        setFileName('No selected file');
-                        // Canvas'ı temizlemek için
-                        const canvas = canvasRef.current;
-
-                    if(canvas){
-                        const ctx = canvas.getContext('2d');
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    }}
-                    else{
-                        setIsDisabled(true);
-                        toast.error('No file selected to delete',
-                        {
-                            position: 'bottom-right',
-                            autoClose: 2000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        }
-                        );
-                    }
-                    }
-
-                   
-                }
+                onClick={()=>handleDelete()}
+                    
                 />
             </span>
         </section>
