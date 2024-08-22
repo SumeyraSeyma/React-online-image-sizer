@@ -31,7 +31,19 @@ function Uploader() {
             canvas.height = newHeight;
 
             // Resmi canvas'a çiz
-            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            ctx.drawImage(img, 0, 0, newWidth, newHeight) ;
+
+            const imageData = ctx.getImageData(0, 0, newWidth, newHeight);
+            const iamgeObject ={
+                data:imageData.data,
+                width:imageData.width,
+                height:imageData.height
+            }
+
+            // Resmi küçültülmüş halde sakla
+            localStorage.setItem('image', JSON.stringify(iamgeObject));
+            
+
             // Canvas'a çizimin gerçekleştiğini kontrol et
             console.log("Küçültülmüş resim canvas üzerine çizildi.");
             };
