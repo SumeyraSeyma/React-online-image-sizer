@@ -4,6 +4,7 @@ import { MdCloudUpload,MdDelete } from 'react-icons/md'
 import {AiFillFileImage} from 'react-icons/ai'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { encode, decode } from 'data-compression'
 
 
 function Uploader() {
@@ -47,18 +48,31 @@ function Uploader() {
                 height:imageData.height
             };
 
-            // Resmi küçültülmüş halde sakla
+             // Resmi sıkıştırma ve kodlama işlemleri
+    const { encodedData, compression_ratio, binaryEnocded } = encode(imageData.data);
 
-            try {
-                localStorage.setItem('image', JSON.stringify(imageObject));
-                console.log('Veri başarıyla kaydedildi.');
-            } catch (e) {
-                if (e.code === 22) {
-                    console.error('Veri boyutu depolama sınırını aştı. Veriyi kaydedemedim.');
-                } else {
-                    console.error('Beklenmedik bir hata oluştu:', e);
-                }
-            }
+    // Kodlanmış veriyi sakla
+    try {
+        localStorage.setItem('encodedData', JSON.stringify(encodedData));
+        localStorage.setItem('compression_ratio', JSON.stringify(compression_ratio));
+        localStorage.setItem('binaryEnocded', JSON.stringify(binaryEnocded));
+        console.log('Veri başarıyla kodlandı ve saklandı.');
+    } catch (e) {
+        if (e.code === 22) {
+            console.error('Veri boyutu depolama sınırını aştı. Veriyi kaydedemedim.');
+        } else {
+            console.error('Beklenmedik bir hata oluştu:', e);
+        }
+    }
+
+    // Decode data
+const decodedData = decode(encodedData);
+
+console.log('Compression Ratio', compression_ratio)
+console.log('Binary Encoded Data', binaryEnocded)
+console.log('Original Data:', dataToEncode);
+console.log('Encoded Data:', encodedData);
+console.log('Decoded Data:', decodedData);
 
 
             };
@@ -66,6 +80,9 @@ function Uploader() {
     }
         
     }, [image]);
+    
+   
+    
 
     const handleDelete = () => {
         if (image) {
