@@ -85,12 +85,21 @@ function Uploader() {
 
     const downloadImage = () => {
         const canvas = canvasRef.current;
-        if (canvas) {
+        if (image && canvas) {
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
             link.download = `${fileName}-resized.png`;
             link.click();
-        } else {
+
+            toast.success('Image downloaded successfully!', {
+                position: 'bottom-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,}); 
+        } else{
             toast.error('No image available to download', {
                 position: 'bottom-right',
                 autoClose: 2000,
