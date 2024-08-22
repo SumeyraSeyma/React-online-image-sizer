@@ -1,10 +1,11 @@
 import React,{useState,useEffect,useRef} from 'react'
 import './Uploader.css'
-import { MdCloudUpload,MdDelete } from 'react-icons/md'
-import {AiFillFileImage} from 'react-icons/ai'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { encode, decode } from 'data-compression'
+import { FaDownload } from 'react-icons/fa';
+import { FaUpload } from "react-icons/fa";
+import { FaFileImage } from "react-icons/fa6";
+import { FaTrash } from "react-icons/fa6";
 
 
 function Uploader() {
@@ -54,6 +55,8 @@ function Uploader() {
     }
         
     }, [image]);
+
+    
     
 
 
@@ -68,6 +71,16 @@ function Uploader() {
             if (canvas) {
                 const ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                toast.warn('Image deleted successfully!', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
         } else {
             setIsDisabled(true);
@@ -85,7 +98,8 @@ function Uploader() {
 
     const downloadImage = () => {
         const canvas = canvasRef.current;
-        if (image && canvas) {
+        if (canvas && canvas.width > 0 && canvas.height > 0) {
+            console.log(canvas.width,canvas.height)
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
             link.download = `${fileName}-resized.png`;
@@ -123,9 +137,45 @@ function Uploader() {
         hidden
         onChange={({target:{files}})=>{
             if (files && files[0]) {
-                setFileName(files[0].name);
-                setImage(URL.createObjectURL(files[0]));
-                setIsDisabled(false);
+                const file = files[0];
+
+                //Dosyanın image olup olmadığını kontrol etme
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        setImage(e.target.result);
+                        setFileName(file.name);
+                        setIsDisabled(true);
+
+                        toast.success('Image uploaded successfully!', {
+                            position: 'bottom-right',
+                            autoClose: 2000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    toast.error('Invalid file type. Please select an image file.', {
+                        position: 'bottom-right',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+
+                    setFileName('No selected file');
+                    setIsDisabled(false);
+                    setImage(null);
+                
+                }
+
+
             }
         }}
         />
@@ -134,19 +184,22 @@ function Uploader() {
         <canvas ref={canvasRef} style={{ maxWidth: '100%', maxHeight: '100%' }} />
         ):(
         <>
-        <MdCloudUpload color='#1475cf' size={60}/>
-        <p>Browse Files to upload</p>
+        <FaUpload  size={60}/>
+        <p>Image Uploader</p>
         </>
         )}
 
         </form>
 
         <section className='uploaded-row'>
-            <AiFillFileImage color='#1475cf' size={30}/>
+            <FaFileImage  size={30}/>
             <span className='upload-content'>
+            <>
+            <FaDownload onClick={downloadImage} size={25} disabled={!image} className="download-button"/>
+            </>
                 {fileName}
-                <MdDelete
-                size={30}
+                <FaTrash
+                size={25}
                 style={{cursor: !isDisabled ? 'not-allowed' : 'pointer',}}
                 onClick={()=>handleDelete()}
                     
@@ -154,9 +207,6 @@ function Uploader() {
             </span>
         </section>
 
-        <button onClick={downloadImage} disabled={!image} className="download-button">
-                Download Resized Image
-        </button>
 
 
     </main>
