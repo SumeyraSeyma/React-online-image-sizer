@@ -6,6 +6,7 @@ import { FaDownload } from 'react-icons/fa';
 import { FaUpload } from "react-icons/fa";
 import { FaFileImage } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa6";
+import { useDropzone } from 'react-dropzone';
 
 
 function Uploader() {
@@ -56,8 +57,46 @@ function Uploader() {
         
     }, [image]);
 
-    
-    
+    const onDrop = (acceptedFiles) => {
+        const file = acceptedFiles[0];
+        if(file){
+            if(file.type.startsWith('image/')){
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    setImage(e.target.result);
+                    setFileName(file.name);
+                    setIsDisabled(true);
+
+                    toast.success('Image uploaded successfully!', {
+                        position: 'bottom-right',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                };
+                reader.readAsDataURL(file);
+            }else{
+                toast.error('Invalid file type. Please select an image file.', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+
+                setFileName('No selected file');
+                setIsDisabled(false);
+                setImage(null);
+            }
+        }
+    };
+
+    const {getRootProps, getInputProps} = useDropzone({onDrop});    
 
 
     const handleDelete = () => {
@@ -128,68 +167,18 @@ function Uploader() {
 
   return (
     <main>
-        <form
-        onClick={()=>document.querySelector('.input-field').click()}
-        >
-        <input type='file'
-        accept='image/*' 
-        className='input-field' 
-        hidden
-        onChange={({target:{files}})=>{
-            if (files && files[0]) {
-                const file = files[0];
-
-                //Dosyanın image olup olmadığını kontrol etme
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        setImage(e.target.result);
-                        setFileName(file.name);
-                        setIsDisabled(true);
-
-                        toast.success('Image uploaded successfully!', {
-                            position: 'bottom-right',
-                            autoClose: 2000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    toast.error('Invalid file type. Please select an image file.', {
-                        position: 'bottom-right',
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-
-                    setFileName('No selected file');
-                    setIsDisabled(false);
-                    setImage(null);
-                
-                }
-
-
-            }
-        }}
-        />
-        
+        <div {...getRootProps()} className='dropzone'>
+            <input {...getInputProps()} />        
         {image ?(
         <canvas ref={canvasRef} style={{ maxWidth: '100%', maxHeight: '100%' }} />
         ):(
         <>
-        <FaUpload  size={60}/>
-        <p>Image Uploader</p>
+            <FaUpload  size={60}/>
+            <p>Image Uploader</p>
         </>
         )}
 
-        </form>
+        </div>
 
         <section className='uploaded-row'>
             <FaFileImage  size={30}/>

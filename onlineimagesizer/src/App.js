@@ -1,3 +1,4 @@
+import Dropzone from 'react-dropzone';
 import './App.css';
 import Uploader from './components/Uploader/Uploader';
 import { ToastContainer } from 'react-toastify';
