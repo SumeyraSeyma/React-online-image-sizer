@@ -3,6 +3,8 @@ import './Uploader.css'
 import { MdCloudUpload,MdDelete } from 'react-icons/md'
 import {AiFillFileImage} from 'react-icons/ai'
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function Uploader() {
     const [image,setImage] = useState(null)
@@ -99,7 +101,7 @@ function Uploader() {
                 {fileName}
                 <MdDelete
                 size={30}
-                style={{cursor: isDisabled ? 'not-allowed' : 'pointer',}}
+                style={{cursor: !isDisabled ? 'not-allowed' : 'pointer',}}
                 onClick={()=>{
                     if(image){
                         setImage(null)
@@ -110,7 +112,7 @@ function Uploader() {
                     if(canvas){
                         const ctx = canvas.getContext('2d');
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    }
+                    }}
                     else{
                         setIsDisabled(true);
                         toast.error('No file selected to delete',
@@ -128,7 +130,7 @@ function Uploader() {
                     }
 
                    
-                }}
+                }
                 />
             </span>
         </section>
