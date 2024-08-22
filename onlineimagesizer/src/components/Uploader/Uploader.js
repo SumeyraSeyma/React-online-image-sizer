@@ -13,6 +13,7 @@ function Uploader() {
     const [image,setImage] = useState(null)
     const [fileName,setFileName] = useState('No selected file')
     const [isDisabled,setIsDisabled] = useState(false)
+    const [isDownDisabled,setIsDownDisabled] = useState(false)
 
     const canvasRef = useRef(null); // Canvas referansı oluşturuldu
 
@@ -153,6 +154,7 @@ function Uploader() {
                 draggable: true,
                 progress: undefined,}); 
         } else{
+            setIsDownDisabled(true);
             toast.error('No image available to download', {
                 position: 'bottom-right',
                 autoClose: 2000,
@@ -174,7 +176,7 @@ function Uploader() {
         ):(
         <>
             <FaUpload  size={60}/>
-            <p>Image Uploader</p>
+            <p className='droppp'>Drop file or click select file</p>
         </>
         )}
 
@@ -184,7 +186,8 @@ function Uploader() {
             <FaFileImage  size={30}/>
             <span className='upload-content'>
             <>
-            <FaDownload onClick={downloadImage} size={25} disabled={!image} className="download-button"/>
+            <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',}} 
+            onClick={downloadImage} size={25} disabled={!image} className="download-button"/>
             </>
                 {fileName}
                 <FaTrash
