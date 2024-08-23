@@ -12,11 +12,12 @@ import { useDropzone } from 'react-dropzone';
 function Uploader() {
     const [image,setImage] = useState(null)
     const [fileName,setFileName] = useState('No selected file')
+    const [Nwidth,setNwidth] = useState(null)
+    const [Nheight,setNheight] = useState(null)
     const [isDisabled,setIsDisabled] = useState(false)
     const [isDownDisabled,setIsDownDisabled] = useState(false)
 
     const canvasRef = useRef(null); // Canvas referansı oluşturuldu
-
 
     // Resim yüklendiğinde canvas'a çizme işlemini gerçekleştiren useEffect
     useEffect(() => {
@@ -192,6 +193,10 @@ function Uploader() {
             
             <span className='upload-content'>
             <>
+            <>
+            <input type = 'number' className='input' placeholder='Width'/>
+            <input type = 'number' className='input' placeholder='Height'/>
+            </>
             <FaFileImage className='fileimage' size={30}/>
             </>
                 {fileName}
