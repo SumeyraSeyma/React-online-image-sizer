@@ -188,15 +188,19 @@ function Uploader() {
         </div>
 
         <section className='uploaded-row'>
+            <>
+            <input type = 'number' className='input-width' placeholder='Width'/>
+            <input type = 'number' className='input-height' placeholder='Height'/>
+            </>
+            <button className='resize-button'>Resize</button>
+            <button className='reset-button'>Reset</button>
+
+
         <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',}} 
             onClick={downloadImage} size={25} disabled={!image} className="download-button"/>
             
             <span className='upload-content'>
             <>
-            <>
-            <input type = 'number' className='input' placeholder='Width'/>
-            <input type = 'number' className='input' placeholder='Height'/>
-            </>
             <FaFileImage className='fileimage' size={30}/>
             </>
                 {fileName}

@@ -5,19 +5,20 @@
     justify-content: center;
     border: 2px dashed;
     height: 300px;
-    width: 500px;
+    width: 550px;
     cursor: pointer;
     border-radius: 5px;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 .uploaded-row{
     margin: 10px 0;
-    display: flex;
-    justify-content: space-between;
+    display: flex;    
     align-items: center;
     padding: 15px 20px;
     border-radius: 5px;
     background-color: #deaff3;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 .upload-content{
@@ -42,7 +43,6 @@
 }
 
 .delete-button{
-    padding: 5px 10px;
     opacity: 0.7;
 }
 
@@ -65,3 +65,90 @@
 .upload:hover{
     opacity: 1;
 }
+
+.input-width{
+    width: 60px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    opacity: 0.8;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.input-height{
+    width: 60px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    opacity: 0.8;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.resize-button{
+    background-color: #111827;
+    display: inline-block;
+    padding: 5px 10px;
+    color:white;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    opacity: 0.7;
+    margin-right: 2px;
+
+}
+
+.resize-button:hover {
+    background-color: #030712;
+    opacity: 1;
+  }
+
+.resize-button:active {
+    background-color: #030712;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+
+.reset-button{
+    transition-duration: 300ms;
+    background-color: #111827;
+    display: inline-block;
+    padding: 5px 10px;
+    color:white;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    opacity: 0.7;
+}
+
+.reset-button:hover {
+    background-color: #030712;
+    opacity: 1;
+  }
+
+.reset-button:active {
+    background-color: #030712;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
