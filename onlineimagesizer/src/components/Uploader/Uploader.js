@@ -26,11 +26,13 @@ function Uploader() {
             const ctx = canvas.getContext('2d');
             const img = new Image();
             img.src = image;
+
             img.onload = () => {
 
                // Orijinal resim boyutları
             const originalWidth = img.width;
             const originalHeight = img.height;
+            console.log(`Previous Size : ${originalWidth} x ${originalHeight}`);
 
             // Küçültülmüş boyutları belirleme (örneğin, %50 küçültme)
             const scaleFactor = 0.5; // %50 küçültme
@@ -139,7 +141,7 @@ function Uploader() {
     const downloadImage = () => {
         const canvas = canvasRef.current;
         if (canvas && canvas.width > 0 && canvas.height > 0) {
-            console.log(canvas.width,canvas.height)
+            console.log(`Next Size : ${canvas.width} x ${canvas.height}`);
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
             link.download = `${fileName}-resized.png`;
