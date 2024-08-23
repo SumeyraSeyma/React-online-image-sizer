@@ -16,6 +16,7 @@ function Uploader() {
     const [Nheight,setNheight] = useState(null)
     const [isDisabled,setIsDisabled] = useState(false)
     const [isDownDisabled,setIsDownDisabled] = useState(false)
+    const [isShaking, setIsShaking] = useState(false);
 
     const canvasRef = useRef(null); // Canvas referansı oluşturuldu
 
@@ -106,6 +107,12 @@ function Uploader() {
 
     const handleDelete = () => {
         if (image) {
+            setIsShaking(true); // Sınıfı ekle
+
+            setTimeout(() => {
+            setIsShaking(false); // Sınıfı kaldır
+        }, 500);
+
             setImage(null);
             setFileName('No selected file');
             setIsDisabled(false);
@@ -189,8 +196,8 @@ function Uploader() {
 
         <section className='uploaded-row'>
             <>
-            <input type = 'number' className='input-width' placeholder='Width'/>
-            <input type = 'number' className='input-height' placeholder='Height'/>
+            <input type = 'number' className='input-width' placeholder='Width' onChange={setNwidth}/>
+            <input type = 'number' className='input-height' placeholder='Height' onChange={setNheight}/>
             </>
             <button className='resize-button'>Resize</button>
             <button className='reset-button'>Reset</button>
@@ -205,7 +212,8 @@ function Uploader() {
             </>
                 {fileName}
                 <FaTrash
-                className='delete-button'
+                className={`delete-button ${isShaking ? 'shake' : ''}`}
+                id='delete-button'
                 size={25}
                 style={{cursor: !isDisabled ? 'not-allowed' : 'pointer',}}
                 onClick={()=>handleDelete()}
