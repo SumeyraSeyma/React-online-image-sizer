@@ -173,7 +173,7 @@ function Uploader() {
     };
 
   return (
-    <main>
+    <main className="flex flex-col items-center">
         <div {...getRootProps()} className='dropzone'>
             <input {...getInputProps()} />        
         {image ?(
