@@ -30,6 +30,11 @@
     border-radius: 5px;
     cursor: pointer;
     margin-right: 10px;
+    opacity: 0.7; 
+}
+
+.download-button:hover{
+    opacity: 1;
 }
 
 .droppp{
@@ -38,4 +43,25 @@
 
 .delete-button{
     padding: 5px 10px;
+    opacity: 0.7;
+}
+
+.delete-button:hover{
+    opacity: 1;
+}
+
+.fileimage{
+    opacity: 0.7;
+}
+
+.fileimage:hover{
+    opacity: 1;
+}
+
+.upload{
+    opacity: 0.7;
+}
+
+.upload:hover{
+    opacity: 1;
 }

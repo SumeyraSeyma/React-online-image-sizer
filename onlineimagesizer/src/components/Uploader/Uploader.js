@@ -177,7 +177,7 @@ function Uploader() {
         <canvas ref={canvasRef} style={{ maxWidth: '100%', maxHeight: '100%' }} />
         ):(
         <>
-            <FaUpload  size={60}/>
+            <FaUpload className='upload'  size={60}/>
             <p className='droppp'>Drop file or click select file</p>
         </>
         )}
@@ -185,11 +185,12 @@ function Uploader() {
         </div>
 
         <section className='uploaded-row'>
-            <FaFileImage  size={30}/>
+        <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',}} 
+            onClick={downloadImage} size={25} disabled={!image} className="download-button"/>
+            
             <span className='upload-content'>
             <>
-            <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',}} 
-            onClick={downloadImage} size={25} disabled={!image} className="download-button"/>
+            <FaFileImage className='fileimage' size={30}/>
             </>
                 {fileName}
                 <FaTrash
