@@ -191,6 +191,7 @@ function Uploader() {
             </>
                 {fileName}
                 <FaTrash
+                className='delete-button'
                 size={25}
                 style={{cursor: !isDisabled ? 'not-allowed' : 'pointer',}}
                 onClick={()=>handleDelete()}
