@@ -69,6 +69,7 @@ function Uploader() {
                     setImage(e.target.result);
                     setFileName(file.name);
                     setIsDisabled(true);
+                    setIsDownDisabled(true);
 
                     toast.success('Image uploaded successfully!', {
                         position: 'bottom-right',
@@ -107,6 +108,7 @@ function Uploader() {
             setImage(null);
             setFileName('No selected file');
             setIsDisabled(false);
+            setIsDownDisabled(false);
 
             // Canvas'ı temizlemek için
             const canvas = canvasRef.current;
@@ -139,7 +141,7 @@ function Uploader() {
     };
 
     const downloadImage = () => {
-        const canvas = canvasRef.current;
+        const canvas = canvasRef.current; 
         if (canvas && canvas.width > 0 && canvas.height > 0) {
             console.log(`Next Size : ${canvas.width} x ${canvas.height}`);
             const link = document.createElement('a');
