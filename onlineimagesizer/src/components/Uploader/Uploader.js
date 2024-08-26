@@ -135,7 +135,6 @@ function Uploader() {
     const downloadImage = () => {
         const canvas = canvasRef.current; 
         if (canvas && canvas.Nwidth > 0 && canvas.Nheight > 0) {
-            console.log(`Next Size : ${canvas.Nwidth} x ${canvas.Nheight}`);
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
             link.download = `${fileName}-resized.png`;
@@ -203,6 +202,16 @@ function Uploader() {
         setNheight("");
         setNwidth("");
         e.preventDefault();
+
+        const canvas = canvasRef.current;
+        const img = new Image();
+        img.src = image;
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+       
+
+        ctx.drawImage(img, 0, 0, img.width, img.height);
     };
 
 
