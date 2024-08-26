@@ -12,8 +12,8 @@ import { useDropzone } from 'react-dropzone';
 function Uploader() {
     const [image,setImage] = useState(null)
     const [fileName,setFileName] = useState('No selected file')
-    const [Nwidth,setNwidth] = useState(null)
-    const [Nheight,setNheight] = useState(null)
+    const [Nwidth,setNwidth] = useState('')
+    const [Nheight,setNheight] = useState('')
     const [isDisabled,setIsDisabled] = useState(false)
     const [isDownDisabled,setIsDownDisabled] = useState(false)
     const [isShaking, setIsShaking] = useState(false);
@@ -30,8 +30,7 @@ function Uploader() {
             img.src = image;
 
             img.onload = () => {
-
-               // Orijinal resim boyutları
+            // Orijinal resim boyutları
             const originalWidth = img.width;
             const originalHeight = img.height;
             console.log(`Previous Size : ${originalWidth} x ${originalHeight}`);
@@ -179,6 +178,14 @@ function Uploader() {
         }
     };
 
+    const resetFunc = (e) => {
+        setNheight("");
+        setNwidth("");
+        e.preventDefault();
+    };
+
+
+
   return (
     <main className="flex flex-col items-center">
         <div {...getRootProps()} className='dropzone'>
@@ -196,11 +203,19 @@ function Uploader() {
 
         <section className='uploaded-row'>
             <>
-            <input type = 'number' className='input-width' placeholder='Width' onChange={setNwidth}/>
-            <input type = 'number' className='input-height' placeholder='Height' onChange={setNheight}/>
+            <input type = 'number' 
+            className='input-width'
+            value={Nwidth} 
+            placeholder='Width' 
+            onChange={(e) => setNwidth(e.target.value) }/>
+            <input type = 'number' 
+            className='input-height'
+            value={Nheight} 
+            placeholder='Height' 
+            onChange={(e) => setNheight(e.target.value)} />
             </>
-            <button className='resize-button'>Resize</button>
-            <button className='reset-button'>Reset</button>
+            <button className='resize-button' onClick={resizeFunc}>Resize</button>
+            <button className='reset-button'onClick={resetFunc} >Reset</button>
 
 
         <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',}} 
