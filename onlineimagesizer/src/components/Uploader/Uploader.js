@@ -211,15 +211,45 @@ function Uploader() {
              const maxWidth = 2000;
              const maxHeight = 2000;
  
-             // Girilen değerlerin sınırlar içinde olup olmadığını kontrol edin
-            width = Math.min(Math.max(Nwidth, minWidth), maxWidth);
-            height = Math.min(Math.max(Nheight, minHeight), maxHeight);
+                // Yeni boyutları kontrol edin
+            if(minWidth > width || maxWidth < width && minHeight > height || maxHeight < height){
+                toast.error('Width and Height values must be between 100 and 2000', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                return;
+            }else if(minWidth > width || maxWidth < width){
+                toast.error('Width value must be between 100 and 2000', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                return;
+            }else if(minHeight > height || maxHeight < height){
+                toast.error('Height value must be between 100 and 2000', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                return;
+            }
 
             
 
-            
-
-            if (Nwidth > 0 && Nheight > 0) {
+            if (minWidth <= width && maxWidth >= width && minHeight <= height && maxHeight >= height) {
                 const canvas = canvasRef.current;
                 if (canvas) {
                     const ctx = canvas.getContext('2d');
