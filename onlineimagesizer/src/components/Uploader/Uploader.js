@@ -34,26 +34,11 @@ function Uploader() {
             const originalWidth = img.width;
             const originalHeight = img.height;
             console.log(`Previous Size : ${originalWidth} x ${originalHeight}`);
-
-            // Küçültülmüş boyutları belirleme (örneğin, %50 küçültme)
-            const scaleFactor = 0.5; // %50 küçültme
-            const newWidth = originalWidth * scaleFactor;
-            const newHeight = originalHeight * scaleFactor;
-
-            // Canvas boyutlarını ayarla
-            canvas.width = newWidth;
-            canvas.height = newHeight;
-
-            // Resmi canvas'a çiz
-            ctx.drawImage(img, 0, 0, newWidth, newHeight) ;
-
-            const imageData = ctx.getImageData(0, 0, newWidth, newHeight);
-            const imageObject ={
-                data:Array.from(imageData.data),
-                width:imageData.width,
-                height:imageData.height
-            };
-
+            
+            //orijiinal resim
+            canvas.width = originalWidth;
+            canvas.height = originalHeight;
+            ctx.drawImage(img, 0, 0, originalWidth, originalHeight);
 
             };
         }
@@ -149,8 +134,8 @@ function Uploader() {
 
     const downloadImage = () => {
         const canvas = canvasRef.current; 
-        if (canvas && canvas.width > 0 && canvas.height > 0) {
-            console.log(`Next Size : ${canvas.width} x ${canvas.height}`);
+        if (canvas && canvas.Nwidth > 0 && canvas.Nheight > 0) {
+            console.log(`Next Size : ${canvas.Nwidth} x ${canvas.Nheight}`);
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
             link.download = `${fileName}-resized.png`;
@@ -175,6 +160,42 @@ function Uploader() {
                 draggable: true,
                 progress: undefined,
             });
+        }
+    };
+
+    const resizeFunc = () => {
+        if (image) {
+            if (Nwidth > 0 && Nheight > 0) {
+                const canvas = canvasRef.current;
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    const img = new Image();
+                    img.src = image;
+
+                    img.onload = () => {
+
+                        // Canvas boyutlarını ayarla
+                        canvas.width = Nwidth;
+                        canvas.height = Nheight;
+            
+                        // Resmi canvas'a çiz
+                        ctx.drawImage(img, 0, 0, Nwidth, Nheight) ;
+                        console.log(`Next Size : ${Nwidth} x ${Nheight}`);
+
+                        toast.success('Image resized successfully!', {
+                            position: 'bottom-right',
+                            autoClose: 2000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    };
+                        
+                }
+                
+            }
         }
     };
 
