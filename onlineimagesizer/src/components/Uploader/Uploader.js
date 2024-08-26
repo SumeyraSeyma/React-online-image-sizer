@@ -19,7 +19,8 @@ function Uploader() {
     const [isDownDisabled,setIsDownDisabled] = useState(false)
     const [isShaking, setIsShaking] = useState(false);
     const [progress, setProgress] = useState(0);
-
+    const [previousSize, setPreviousSize] = useState({width: 0, height: 0});
+    const [newSize, setNewSize] = useState({width: 0, height: 0});
 
     const canvasRef = useRef(null); // Canvas referansı oluşturuldu
 
@@ -48,6 +49,25 @@ function Uploader() {
     }
         
     }, [image]);
+
+    const handleWidthChange = (e) => {
+        const newWidth = parseInt(e.target.value);
+        setNwidth(newWidth);
+    
+        // weight (Nwidth) değişikliğinde height (Nheight) otomatik ayarlaması
+        const newHeight = Math.ceil(newWidth / 2);
+        setNheight(newHeight);
+    };
+    
+    const handleHeightChange = (e) => {
+        const newHeight = parseInt(e.target.value);
+        setNheight(newHeight);
+    
+        // height (Nheight) değişikliğinde weight (Nwidth) otomatik ayarlaması
+        const newWidth = newHeight * 2 - 1;
+        setNwidth(newWidth);
+    };
+    
 
     const onDrop = (acceptedFiles) => {
         const file = acceptedFiles[0];
@@ -177,6 +197,11 @@ function Uploader() {
 
     const resizeFunc = () => {
         if (image) {
+            const canvas = canvasRef.current;
+            if(canvas){
+                const previousWidth = canvas.width;
+                const previousHeight = canvas.height;
+
             // Yeni boyutları alın
             let width = parseInt(Nwidth);
             let height = parseInt(Nheight);
@@ -221,6 +246,8 @@ function Uploader() {
              const minHeight = 100;
              const maxWidth = 20000;
              const maxHeight = 20000;
+
+
  
                 // Yeni boyutları kontrol edin
             if(minWidth > width || maxWidth < width && minHeight > height || maxHeight < height){
@@ -261,8 +288,8 @@ function Uploader() {
             setProgress(25);
 
             if (minWidth <= width && maxWidth >= width && minHeight <= height && maxHeight >= height) {
-                const canvas = canvasRef.current;
                 if (canvas) {
+
                     const ctx = canvas.getContext('2d');
                     const img = new Image();
                     img.src = image;
@@ -278,6 +305,10 @@ function Uploader() {
                         ctx.drawImage(img, 0, 0, Nwidth, Nheight) ;
                         console.log(`Next Size : ${Nwidth} x ${Nheight}`);
 
+                         // State'leri güncelle
+                        setPreviousSize({ width: previousWidth, height: previousHeight });
+                        setNewSize({ width, height });
+
                         setProgress(100); // Progress bar'ı %100'e ayarla
 
                         toast.success('Image resized successfully!', {
@@ -292,11 +323,13 @@ function Uploader() {
 
                         setTimeout(() => setProgress(0), 1500); // Progress bar'ı sıfırla
 
-                    };
+                        };
                         
-                }
+                    }
                 
+                }
             }
+        
         }
     };
 
@@ -360,8 +393,8 @@ function Uploader() {
             value={Nwidth}
             min={100}
             max={20000} 
-            placeholder='Width' 
-            onChange={(e) => setNwidth(e.target.value) }/>
+            placeholder='Width'
+            onChange={handleWidthChange}/>
 
             <input type = 'number' 
             className='input-height'
@@ -369,7 +402,7 @@ function Uploader() {
             min={100}
             max={20000} 
             placeholder='Height' 
-            onChange={(e) => setNheight(e.target.value)} />
+            onChange={handleHeightChange} />
             </>
             <button className='resize-button' onClick={resizeFunc}>Resize</button>
             <button className='reset-button'onClick={resetFunc} >Reset</button>
@@ -394,6 +427,12 @@ function Uploader() {
             </span>
         </section>
 
+        {previousSize.width > 0 && newSize.width > 0 && (
+                <div className="size-info">
+                    <p>Previous Size: {previousSize.width} x {previousSize.height} pixels</p>
+                    <p>New Size: {newSize.width} x {newSize.height} pixels</p>
+                </div>
+            )}
 
 
     </main>
