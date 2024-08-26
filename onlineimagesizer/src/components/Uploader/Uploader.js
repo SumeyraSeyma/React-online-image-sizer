@@ -164,6 +164,61 @@ function Uploader() {
 
     const resizeFunc = () => {
         if (image) {
+            // Yeni boyutları alın
+            let width = parseInt(Nwidth);
+            let height = parseInt(Nheight);
+
+                if (Nwidth === "" && Nheight === ""){
+                    toast.error('Please enter width and height values', {
+                        position: 'bottom-right',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    return;
+                }else if (isNaN(width)){
+                    toast.error('Please enter a valid width value', {
+                        position: 'bottom-right',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    return;
+                }else if (isNaN(height)){
+                    toast.error('Please enter a valid height value', {
+                        position: 'bottom-right',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    return;
+                }
+
+
+
+             // Sınırları belirleyin
+             const minWidth = 100;
+             const minHeight = 100;
+             const maxWidth = 2000;
+             const maxHeight = 2000;
+ 
+             // Girilen değerlerin sınırlar içinde olup olmadığını kontrol edin
+            width = Math.min(Math.max(Nwidth, minWidth), maxWidth);
+            height = Math.min(Math.max(Nheight, minHeight), maxHeight);
+
+            
+
+            
+
             if (Nwidth > 0 && Nheight > 0) {
                 const canvas = canvasRef.current;
                 if (canvas) {
@@ -248,12 +303,17 @@ function Uploader() {
             <>
             <input type = 'number' 
             className='input-width'
-            value={Nwidth} 
+            value={Nwidth}
+            min={100}
+            max={2000} 
             placeholder='Width' 
             onChange={(e) => setNwidth(e.target.value) }/>
+
             <input type = 'number' 
             className='input-height'
-            value={Nheight} 
+            value={Nheight}
+            min={100}
+            max={2000} 
             placeholder='Height' 
             onChange={(e) => setNheight(e.target.value)} />
             </>
