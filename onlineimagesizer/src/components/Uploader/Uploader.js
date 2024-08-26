@@ -134,7 +134,7 @@ function Uploader() {
 
     const downloadImage = () => {
         const canvas = canvasRef.current; 
-        if (canvas && canvas.Nwidth > 0 && canvas.Nheight > 0) {
+        if (canvas && canvas.width > 0 && canvas.height > 0) {
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
             link.download = `${fileName}-resized.png`;
@@ -204,14 +204,27 @@ function Uploader() {
         e.preventDefault();
 
         const canvas = canvasRef.current;
-        const img = new Image();
-        img.src = image;
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-       
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.src = image;
 
-        ctx.drawImage(img, 0, 0, img.width, img.height);
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+       
+                toast.warn('Image reset successfully!', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
     };
 
 
