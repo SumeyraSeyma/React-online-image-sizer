@@ -9,6 +9,7 @@ import { FaTrash } from "react-icons/fa6";
 import { useDropzone } from 'react-dropzone';
 
 
+
 function Uploader() {
     const [image,setImage] = useState(null)
     const [fileName,setFileName] = useState('No selected file')
@@ -17,6 +18,8 @@ function Uploader() {
     const [isDisabled,setIsDisabled] = useState(false)
     const [isDownDisabled,setIsDownDisabled] = useState(false)
     const [isShaking, setIsShaking] = useState(false);
+    const [progress, setProgress] = useState(0);
+
 
     const canvasRef = useRef(null); // Canvas referansı oluşturuldu
 
@@ -101,6 +104,7 @@ function Uploader() {
             setFileName('No selected file');
             setIsDisabled(false);
             setIsDownDisabled(false);
+            
 
             // Canvas'ı temizlemek için
             const canvas = canvasRef.current;
@@ -135,10 +139,17 @@ function Uploader() {
     const downloadImage = () => {
         const canvas = canvasRef.current; 
         if (canvas && canvas.width > 0 && canvas.height > 0) {
+            setProgress(25);
+
             const link = document.createElement('a');
             link.href = canvas.toDataURL('image/png');
             link.download = `${fileName}-resized.png`;
+
+            setProgress(50);
+
             link.click();
+
+            setProgress(100);
 
             toast.success('Image downloaded successfully!', {
                 position: 'bottom-right',
@@ -148,6 +159,8 @@ function Uploader() {
                 pauseOnHover: true,
                 draggable: true,
                 progress: undefined,}); 
+
+                setTimeout(() => setProgress(0), 1500);
         } else{
             setIsDownDisabled(true);
             toast.error('No image available to download', {
@@ -203,17 +216,15 @@ function Uploader() {
                     return;
                 }
 
-
-
              // Sınırları belirleyin
              const minWidth = 100;
              const minHeight = 100;
-             const maxWidth = 2000;
-             const maxHeight = 2000;
+             const maxWidth = 20000;
+             const maxHeight = 20000;
  
                 // Yeni boyutları kontrol edin
             if(minWidth > width || maxWidth < width && minHeight > height || maxHeight < height){
-                toast.error('Width and Height values must be between 100 and 2000', {
+                toast.error('Width and Height values must be between 100 and 20000', {
                     position: 'bottom-right',
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -224,7 +235,7 @@ function Uploader() {
                 });
                 return;
             }else if(minWidth > width || maxWidth < width){
-                toast.error('Width value must be between 100 and 2000', {
+                toast.error('Width value must be between 100 and 20000', {
                     position: 'bottom-right',
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -235,7 +246,7 @@ function Uploader() {
                 });
                 return;
             }else if(minHeight > height || maxHeight < height){
-                toast.error('Height value must be between 100 and 2000', {
+                toast.error('Height value must be between 100 and 20000', {
                     position: 'bottom-right',
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -245,9 +256,9 @@ function Uploader() {
                     progress: undefined,
                 });
                 return;
-            }
-
+            }  
             
+            setProgress(25);
 
             if (minWidth <= width && maxWidth >= width && minHeight <= height && maxHeight >= height) {
                 const canvas = canvasRef.current;
@@ -257,6 +268,7 @@ function Uploader() {
                     img.src = image;
 
                     img.onload = () => {
+                        setProgress(50); // Progress bar'ı %50'ye ayarla
 
                         // Canvas boyutlarını ayarla
                         canvas.width = Nwidth;
@@ -265,6 +277,8 @@ function Uploader() {
                         // Resmi canvas'a çiz
                         ctx.drawImage(img, 0, 0, Nwidth, Nheight) ;
                         console.log(`Next Size : ${Nwidth} x ${Nheight}`);
+
+                        setProgress(100); // Progress bar'ı %100'e ayarla
 
                         toast.success('Image resized successfully!', {
                             position: 'bottom-right',
@@ -275,6 +289,9 @@ function Uploader() {
                             draggable: true,
                             progress: undefined,
                         });
+
+                        setTimeout(() => setProgress(0), 1500); // Progress bar'ı sıfırla
+
                     };
                         
                 }
@@ -326,8 +343,15 @@ function Uploader() {
             <p className='droppp'>Drop file or click select file</p>
         </>
         )}
-
+        
         </div>
+
+        {progress > 0 && (
+    <div className="progress-container" style={{ width: '100%', backgroundColor: '#ddd' }}>
+        <div className="progress-bar" style={{ width: `${progress}%`, height: '10px' }}></div>
+    </div>
+)}
+
 
         <section className='uploaded-row'>
             <>
@@ -335,7 +359,7 @@ function Uploader() {
             className='input-width'
             value={Nwidth}
             min={100}
-            max={2000} 
+            max={20000} 
             placeholder='Width' 
             onChange={(e) => setNwidth(e.target.value) }/>
 
@@ -343,7 +367,7 @@ function Uploader() {
             className='input-height'
             value={Nheight}
             min={100}
-            max={2000} 
+            max={20000} 
             placeholder='Height' 
             onChange={(e) => setNheight(e.target.value)} />
             </>
