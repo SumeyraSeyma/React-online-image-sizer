@@ -432,14 +432,16 @@ function Uploader() {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
                 <button
+                    className='button-dimensions'
                     onClick={() => handleToggle('dimensions')}
                     style={{
                         padding: '10px 20px',
                         borderRadius: '5px 0 0 5px',
                         border: '1px solid #ccc',
-                        backgroundColor: activeButton === 'dimensions' ? '#598cec' : '#00509E',
+                        backgroundColor: activeButton === 'dimensions' ? '#111827' : '#030712',
+                        opacity: activeButton === 'dimensions' ? '1' : '0.7',
                         color: activeButton === 'dimensions' ? '#fff' : '#ccc',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
                     }}
                 >
                     By Dimensions
@@ -450,7 +452,8 @@ function Uploader() {
                         padding: '10px 20px',
                         borderRadius: '0 5px 5px 0',
                         border: '1px solid #ccc',
-                        backgroundColor: activeButton === 'percentage' ? '#598cec' : '#00509E',
+                        backgroundColor: activeButton === 'percentage' ? '#111827' : '#030712',
+                        opacity: activeButton === 'percentage' ? '1' : '0.7',
                         color: activeButton === 'percentage' ? '#fff' : '#ccc',
                         cursor: 'pointer'
                     }}
@@ -498,14 +501,16 @@ function Uploader() {
                     <input type = 'number' 
             className='input-width'
             value={Nwidth}
-            max={19999} 
+            max={19999}
+            min={1} 
             placeholder='Width'
             onChange={handleWidthChange}/>
 
             <input type = 'number' 
             className='input-height'
             value={Nheight}
-            max={19999} 
+            max={19999}
+            min={1} 
             placeholder='Height' 
             onChange={handleHeightChange} />
                 </>
