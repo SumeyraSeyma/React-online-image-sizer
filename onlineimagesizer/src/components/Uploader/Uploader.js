@@ -54,19 +54,78 @@ function Uploader() {
         const newWidth = parseInt(e.target.value);
         setNwidth(newWidth);
     
-        // weight (Nwidth) değişikliğinde height (Nheight) otomatik ayarlaması
-        const newHeight = Math.ceil(newWidth / 2);
-        setNheight(newHeight);
+        if (newWidth === 1) {
+            setNheight(1);
+        } else {
+            const canvas = canvasRef.current;
+            if (canvas && canvas.width > 0 && canvas.height > 0) {
+                const aspectRatio = canvas.height / canvas.width;
+                const newHeight = Math.floor(newWidth * aspectRatio);
+                setNheight(newHeight);
+            } else {
+                setNheight(""); // Geçerli bir resim yoksa yüksekliği sıfırlayın
+                toast.error('Canvas üzerinde geçerli bir resim yok.', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
     };
+    
+    
     
     const handleHeightChange = (e) => {
         const newHeight = parseInt(e.target.value);
         setNheight(newHeight);
     
-        // height (Nheight) değişikliğinde weight (Nwidth) otomatik ayarlaması
-        const newWidth = newHeight * 2 - 1;
-        setNwidth(newWidth);
+        const canvas = canvasRef.current;
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            if (canvas.width > 0 && canvas.height > 0) {
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                
+                // Bilinear interpolation kullanarak yeni genişliği hesaplayın
+                const aspectRatio = canvas.width / canvas.height;
+                const newWidth = Math.floor(newHeight * aspectRatio);
+                setNwidth(newWidth);
+    
+                // Yeni boyutlar için resmi yeniden çizmek isterseniz:
+                const newImgData = ctx.createImageData(newWidth, newHeight);
+                for (let y = 0; y < newHeight; y++) {
+                    for (let x = 0; x < newWidth; x++) {
+                        const pixelIndex = (y * newWidth + x) * 4;
+                        const originalX = (x / newWidth) * canvas.width;
+                        const originalY = (y / newHeight) * canvas.height;
+    
+                        const r = bilinearInterpolate(imgData.data, originalX, originalY, canvas.width, canvas.height);
+                        newImgData.data[pixelIndex] = r;
+                        newImgData.data[pixelIndex + 1] = r; // G
+                        newImgData.data[pixelIndex + 2] = r; // B
+                        newImgData.data[pixelIndex + 3] = 255; // Alpha
+                    }
+                }
+    
+                ctx.putImageData(newImgData, 0, 0);
+            } else {
+                toast.error('Canvas üzerinde geçerli bir resim yok.', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
     };
+    
+    
     
 
     const onDrop = (acceptedFiles) => {
@@ -195,6 +254,25 @@ function Uploader() {
         }
     };
 
+    function bilinearInterpolate(pixels, x, y, width, height) {
+        const x1 = Math.floor(x);
+        const y1 = Math.floor(y);
+        const x2 = Math.min(width - 1, Math.ceil(x));
+        const y2 = Math.min(height - 1, Math.ceil(y));
+        
+        const q11 = pixels[(y1 * width + x1) * 4];
+        const q21 = pixels[(y1 * width + x2) * 4];
+        const q12 = pixels[(y2 * width + x1) * 4];
+        const q22 = pixels[(y2 * width + x2) * 4];
+        
+        const r1 = q11 * (x2 - x) + q21 * (x - x1);
+        const r2 = q12 * (x2 - x) + q22 * (x - x1);
+        const p = r1 * (y2 - y) + r2 * (y - y1);
+        
+        return p;
+    }
+    
+
     const resizeFunc = () => {
         if (image) {
             const canvas = canvasRef.current;
@@ -202,89 +280,85 @@ function Uploader() {
                 const previousWidth = canvas.width;
                 const previousHeight = canvas.height;
 
-            // Yeni boyutları alın
-            let width = parseInt(Nwidth);
-            let height = parseInt(Nheight);
+                // Yeni boyutları alın
+                let width = parseInt(Nwidth);
+                let height = parseInt(Nheight);
 
-            if (Nwidth === "" || Nheight === "" || isNaN(width) || isNaN(height)){
-                toast.error('Please enter width and height values', {
-                    position: 'bottom-right',
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                return;
-            }
-
-
-             // Sınırları belirleyin
-             const maxWidth = 20000;
-             const maxHeight = 20000;
-
-
-             if (width > maxWidth || height > maxHeight) {
-                toast.error('Width and Height values must be less than or equal to 20000', {
-                    position: 'bottom-right',
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                return;
-            }
-            
-            setProgress(25);
-
-            if (maxWidth >= width && maxHeight >= height) {
-                if (canvas) {
-
-                    const ctx = canvas.getContext('2d');
-                    const img = new Image();
-                    img.src = image;
-
-                    img.onload = () => {
-                        setProgress(50); // Progress bar'ı %50'ye ayarla
-
-                        // Canvas boyutlarını ayarla
-                        canvas.width = Nwidth;
-                        canvas.height = Nheight;
-            
-                        // Resmi canvas'a çiz
-                        ctx.drawImage(img, 0, 0, Nwidth, Nheight) ;
-                        console.log(`Next Size : ${Nwidth} x ${Nheight}`);
-
-                         // State'leri güncelle
-                        setPreviousSize({ width: previousWidth, height: previousHeight });
-                        setNewSize({ width, height });
-
-                        setProgress(100); // Progress bar'ı %100'e ayarla
-
-                        toast.success('Image resized successfully!', {
-                            position: 'bottom-right',
-                            autoClose: 2000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
-
-                        setTimeout(() => setProgress(0), 1500); // Progress bar'ı sıfırla
-
-                        };
-                        
-                    }
-                
+                if (Nwidth === "" || Nheight === "" || isNaN(width) || isNaN(height)){
+                    toast.error('Please enter width and height values', {
+                        position: 'bottom-right',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    return;
                 }
+
+
+                // Sınırları belirleyin
+                const maxWidth = 20000;
+                const maxHeight = 20000;
+
+
+                if (width > maxWidth || height > maxHeight) {
+                    toast.error('Width and Height values must be less than or equal to 20000', {
+                        position: 'bottom-right',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    return;
+                }
+            
+                setProgress(25);
+
+
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                img.src = image;
+
+                img.onload = () => {
+                    setProgress(50); // Progress bar'ı %50'ye ayarla
+
+                     // Canvas boyutlarını ayarla
+                    canvas.width = width;
+                    canvas.height = height;
+            
+                    // Resmi yeniden çiz
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // State'leri güncelle
+                    setPreviousSize({ width: previousWidth, height: previousHeight });
+                    setNewSize({ width, height });
+
+                    setProgress(100); // Progress bar'ı %100'e ayarla
+
+                    toast.success('Image resized successfully!', {
+                        position: 'bottom-right',
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+
+                    setTimeout(() => setProgress(0), 1500); // Progress bar'ı sıfırla
+
+                };
+                        
             }
-        
+                
         }
-    };
+    }
+        
+        
 
     const resetFunc = (e) => {
         setNheight("");
