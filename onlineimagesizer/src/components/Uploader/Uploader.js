@@ -206,52 +206,27 @@ function Uploader() {
             let width = parseInt(Nwidth);
             let height = parseInt(Nheight);
 
-                if (Nwidth === "" && Nheight === ""){
-                    toast.error('Please enter width and height values', {
-                        position: 'bottom-right',
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    return;
-                }else if (isNaN(width)){
-                    toast.error('Please enter a valid width value', {
-                        position: 'bottom-right',
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    return;
-                }else if (isNaN(height)){
-                    toast.error('Please enter a valid height value', {
-                        position: 'bottom-right',
-                        autoClose: 2000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                    return;
-                }
+            if (Nwidth === "" || Nheight === "" || isNaN(width) || isNaN(height)){
+                toast.error('Please enter width and height values', {
+                    position: 'bottom-right',
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                return;
+            }
+
 
              // Sınırları belirleyin
-             const minWidth = 100;
-             const minHeight = 100;
              const maxWidth = 20000;
              const maxHeight = 20000;
 
 
- 
-                // Yeni boyutları kontrol edin
-            if(minWidth > width || maxWidth < width && minHeight > height || maxHeight < height){
-                toast.error('Width and Height values must be between 100 and 20000', {
+             if (width > maxWidth || height > maxHeight) {
+                toast.error('Width and Height values must be less than or equal to 20000', {
                     position: 'bottom-right',
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -261,33 +236,11 @@ function Uploader() {
                     progress: undefined,
                 });
                 return;
-            }else if(minWidth > width || maxWidth < width){
-                toast.error('Width value must be between 100 and 20000', {
-                    position: 'bottom-right',
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                return;
-            }else if(minHeight > height || maxHeight < height){
-                toast.error('Height value must be between 100 and 20000', {
-                    position: 'bottom-right',
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                return;
-            }  
+            }
             
             setProgress(25);
 
-            if (minWidth <= width && maxWidth >= width && minHeight <= height && maxHeight >= height) {
+            if (maxWidth >= width && maxHeight >= height) {
                 if (canvas) {
 
                     const ctx = canvas.getContext('2d');
@@ -391,7 +344,6 @@ function Uploader() {
             <input type = 'number' 
             className='input-width'
             value={Nwidth}
-            min={100}
             max={20000} 
             placeholder='Width'
             onChange={handleWidthChange}/>
@@ -399,7 +351,6 @@ function Uploader() {
             <input type = 'number' 
             className='input-height'
             value={Nheight}
-            min={100}
             max={20000} 
             placeholder='Height' 
             onChange={handleHeightChange} />
