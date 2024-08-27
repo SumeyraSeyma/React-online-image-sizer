@@ -21,6 +21,7 @@ function Uploader() {
     const [progress, setProgress] = useState(0);
     const [previousSize, setPreviousSize] = useState({width: 0, height: 0});
     const [newSize, setNewSize] = useState({width: 0, height: 0});
+    const [activeToggle, setActiveToggle] = useState('dimensions');
 
     const canvasRef = useRef(null); // Canvas referansı oluşturuldu
 
@@ -49,6 +50,10 @@ function Uploader() {
     }
         
     }, [image]);
+
+    const handleToggleChange = (value) => {
+        setActiveToggle(value);
+    };
 
     const handleWidthChange = (e) => {
         const newWidth = parseInt(e.target.value);
@@ -107,7 +112,27 @@ function Uploader() {
     };
     
     
-    
+    const bypercent = (percent) => {
+        const canvas = canvasRef.current;
+        if (canvas && canvas.width > 0 && canvas.height > 0) {
+            const newWidth = Math.floor(canvas.width * percent / 100);
+            const newHeight = Math.floor(canvas.height * percent / 100);
+            setNwidth(newWidth);
+            setNheight(newHeight);
+        } else {
+            setNwidth(""); // Geçerli bir resim yoksa genişliği sıfırlayın
+            setNheight(""); // Geçerli bir resim yoksa yüksekliği sıfırlayın
+            toast.error('Canvas üzerinde geçerli bir resim yok.', {
+                position: 'bottom-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    };
     
 
     const onDrop = (acceptedFiles) => {
@@ -379,6 +404,46 @@ function Uploader() {
         }
     };
 
+    function ToggleButtonGroup({ onToggleChange }) {
+        const [activeButton, setActiveButton] = useState('dimensions');
+    
+        const handleToggle = (value) => {
+            setActiveButton(value);
+            onToggleChange(value); // Parent bileşene aktif buton bilgisini gönder
+        };
+    
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+                <button
+                    onClick={() => handleToggle('dimensions')}
+                    style={{
+                        padding: '10px 20px',
+                        borderRadius: '5px 0 0 5px',
+                        border: '1px solid #ccc',
+                        backgroundColor: activeButton === 'dimensions' ? '#444' : '#777',
+                        color: activeButton === 'dimensions' ? '#fff' : '#ccc',
+                        cursor: 'pointer'
+                    }}
+                >
+                    By Dimensions
+                </button>
+                <button
+                    onClick={() => handleToggle('percentage')}
+                    style={{
+                        padding: '10px 20px',
+                        borderRadius: '0 5px 5px 0',
+                        border: '1px solid #ccc',
+                        backgroundColor: activeButton === 'percentage' ? '#444' : '#777',
+                        color: activeButton === 'percentage' ? '#fff' : '#ccc',
+                        cursor: 'pointer'
+                    }}
+                >
+                    As Percentage
+                </button>
+            </div>
+        );
+    }
+
 
 
   return (
@@ -405,7 +470,13 @@ function Uploader() {
 
         <section className='uploaded-row'>
             <>
-            <input type = 'number' 
+            <ToggleButtonGroup onToggleChange={handleToggleChange} />
+            </>
+            <>
+            {
+                activeToggle === 'dimensions' ? (
+                    <>
+                    <input type = 'number' 
             className='input-width'
             value={Nwidth}
             max={20000} 
@@ -418,7 +489,19 @@ function Uploader() {
             max={20000} 
             placeholder='Height' 
             onChange={handleHeightChange} />
+                </>
+            ) : (
+                <input type = 'number'
+                className='input-percent'
+                placeholder='Percentage'
+                onChange={(e) => bypercent(e.target.value)}
+                
+                />
+            )
+            }
+            
             </>
+            
             <button className='resize-button' onClick={resizeFunc}>Resize</button>
             <button className='reset-button'onClick={resetFunc} >Reset</button>
 
@@ -443,7 +526,7 @@ function Uploader() {
         </section>
 
         {previousSize.width > 0 && newSize.width > 0 && (
-                <div className="size-info">
+                <div className="size-info font-bold">
                     <p>Previous Size: {previousSize.width} x {previousSize.height} pixels</p>
                     <p>New Size: {newSize.width} x {newSize.height} pixels</p>
                 </div>

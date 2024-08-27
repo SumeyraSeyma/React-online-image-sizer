@@ -212,4 +212,19 @@
     font-style: italic;
 }
 
+.input-percent{
+    width: 70px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    margin-right: 20px;
+    opacity: 0.8;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
   
