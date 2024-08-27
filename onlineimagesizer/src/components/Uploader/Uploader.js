@@ -298,7 +298,7 @@ function Uploader() {
                 let height = parseInt(Nheight);
 
                 if (activeToggle === 'percentage') {
-                    if (percent === "" || isNaN(percent)) {
+                    if (percent === "" || isNaN(percent) || percent < 1) {
                         toast.error('Please enter a valid percentage value', {
                             position: 'bottom-right',
                             autoClose: 2000,
@@ -316,7 +316,7 @@ function Uploader() {
                 }
     
 
-                if (activeToggle === 'dimensions' && (Nwidth === "" || Nheight === "" || isNaN(width) || isNaN(height))){
+                if (activeToggle === 'dimensions' && (Nwidth === "" || Nheight === "" || isNaN(width) || isNaN(height) || width < 1 || height < 1)) {
                     toast.error('Please enter width and height values', {
                         position: 'bottom-right',
                         autoClose: 2000,
