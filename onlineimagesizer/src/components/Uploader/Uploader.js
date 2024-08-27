@@ -22,6 +22,7 @@ function Uploader() {
     const [previousSize, setPreviousSize] = useState({width: 0, height: 0});
     const [newSize, setNewSize] = useState({width: 0, height: 0});
     const [activeToggle, setActiveToggle] = useState('dimensions');
+    const [percent, setPercent] = useState('');
 
     const canvasRef = useRef(null); // Canvas referansı oluşturuldu
 
@@ -112,7 +113,8 @@ function Uploader() {
     };
     
     
-    const bypercent = (percent) => {
+    const bypercent = (value) => {
+        setPercent(value);
         const canvas = canvasRef.current;
         if (canvas && canvas.width > 0 && canvas.height > 0) {
             const newWidth = Math.floor(canvas.width * percent / 100);
@@ -265,23 +267,6 @@ function Uploader() {
         }
     };
 
-    function bilinearInterpolate(pixels, x, y, width, height) {
-        const x1 = Math.floor(x);
-        const y1 = Math.floor(y);
-        const x2 = Math.min(width - 1, Math.ceil(x));
-        const y2 = Math.min(height - 1, Math.ceil(y));
-        
-        const q11 = pixels[(y1 * width + x1) * 4];
-        const q21 = pixels[(y1 * width + x2) * 4];
-        const q12 = pixels[(y2 * width + x1) * 4];
-        const q22 = pixels[(y2 * width + x2) * 4];
-        
-        const r1 = q11 * (x2 - x) + q21 * (x - x1);
-        const r2 = q12 * (x2 - x) + q22 * (x - x1);
-        const p = r1 * (y2 - y) + r2 * (y - y1);
-        
-        return p;
-    }
     
 
     const resizeFunc = () => {
@@ -379,6 +364,8 @@ function Uploader() {
         previousSize.height = 0;
         newSize.width = 0;
         newSize.height = 0;
+        setPercent("");
+        
 
         const canvas = canvasRef.current;
         if (canvas) {
@@ -493,7 +480,8 @@ function Uploader() {
             ) : (
                 <input type = 'number'
                 className='input-percent'
-                placeholder='Percentage'
+                placeholder='%'
+                value={percent}
                 onChange={(e) => bypercent(e.target.value)}
                 
                 />
