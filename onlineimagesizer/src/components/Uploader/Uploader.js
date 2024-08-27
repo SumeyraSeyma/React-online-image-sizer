@@ -280,7 +280,26 @@ function Uploader() {
                 let width = parseInt(Nwidth);
                 let height = parseInt(Nheight);
 
-                if (Nwidth === "" || Nheight === "" || isNaN(width) || isNaN(height)){
+                if (activeToggle === 'percentage') {
+                    if (percent === "" || isNaN(percent)) {
+                        toast.error('Please enter a valid percentage value', {
+                            position: 'bottom-right',
+                            autoClose: 2000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        return;
+                    }
+    
+                    width = Math.floor(canvas.width * percent / 100);
+                    height = Math.floor(canvas.height * percent / 100);
+                }
+    
+
+                if (activeToggle === 'dimensions' && (Nwidth === "" || Nheight === "" || isNaN(width) || isNaN(height))){
                     toast.error('Please enter width and height values', {
                         position: 'bottom-right',
                         autoClose: 2000,
@@ -299,8 +318,8 @@ function Uploader() {
                 const maxHeight = 20000;
 
 
-                if (width > maxWidth || height > maxHeight) {
-                    toast.error('Width and Height values must be less than or equal to 20000', {
+                if ( activeToggle === 'dimensions'  && width > maxWidth || height > maxHeight) {
+                    toast.error('Width and Height values must be less than 20000', {
                         position: 'bottom-right',
                         autoClose: 2000,
                         hideProgressBar: false,
@@ -391,12 +410,11 @@ function Uploader() {
         }
     };
 
-    function ToggleButtonGroup({ onToggleChange }) {
-        const [activeButton, setActiveButton] = useState('dimensions');
-    
-        const handleToggle = (value) => {
-            setActiveButton(value);
-            onToggleChange(value); // Parent bileşene aktif buton bilgisini gönder
+    function ToggleButtonGroup({ onToggleChange,activeButton }) {
+           const handleToggle = (value) => {
+            if(value !== activeButton){
+                onToggleChange(value);
+            }
         };
     
         return (
@@ -457,7 +475,9 @@ function Uploader() {
 
         <section className='uploaded-row'>
             <>
-            <ToggleButtonGroup onToggleChange={handleToggleChange} />
+            <ToggleButtonGroup
+            activeButton={activeToggle} 
+            onToggleChange={handleToggleChange} />
             </>
             <>
             {
@@ -466,14 +486,14 @@ function Uploader() {
                     <input type = 'number' 
             className='input-width'
             value={Nwidth}
-            max={20000} 
+            max={19999} 
             placeholder='Width'
             onChange={handleWidthChange}/>
 
             <input type = 'number' 
             className='input-height'
             value={Nheight}
-            max={20000} 
+            max={19999} 
             placeholder='Height' 
             onChange={handleHeightChange} />
                 </>
