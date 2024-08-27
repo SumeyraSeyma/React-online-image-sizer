@@ -165,6 +165,10 @@ function Uploader() {
             setFileName('No selected file');
             setIsDisabled(false);
             setIsDownDisabled(false);
+            previousSize.width = 0;
+            previousSize.height = 0;
+            newSize.width = 0;
+            newSize.height = 0;
             
 
             // Canvas'ı temizlemek için
@@ -346,6 +350,10 @@ function Uploader() {
         setNheight("");
         setNwidth("");
         e.preventDefault();
+        previousSize.width = 0;
+        previousSize.height = 0;
+        newSize.width = 0;
+        newSize.height = 0;
 
         const canvas = canvasRef.current;
         if (canvas) {
