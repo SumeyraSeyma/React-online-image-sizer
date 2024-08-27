@@ -83,35 +83,16 @@ function Uploader() {
         const newHeight = parseInt(e.target.value);
         setNheight(newHeight);
     
-        const canvas = canvasRef.current;
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            if (canvas.width > 0 && canvas.height > 0) {
-                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                
-                // Bilinear interpolation kullanarak yeni genişliği hesaplayın
+        if (newHeight === 1) {
+            setNwidth(1);
+        } else {
+            const canvas = canvasRef.current;
+            if (canvas && canvas.width > 0 && canvas.height > 0) {
                 const aspectRatio = canvas.width / canvas.height;
                 const newWidth = Math.floor(newHeight * aspectRatio);
                 setNwidth(newWidth);
-    
-                // Yeni boyutlar için resmi yeniden çizmek isterseniz:
-                const newImgData = ctx.createImageData(newWidth, newHeight);
-                for (let y = 0; y < newHeight; y++) {
-                    for (let x = 0; x < newWidth; x++) {
-                        const pixelIndex = (y * newWidth + x) * 4;
-                        const originalX = (x / newWidth) * canvas.width;
-                        const originalY = (y / newHeight) * canvas.height;
-    
-                        const r = bilinearInterpolate(imgData.data, originalX, originalY, canvas.width, canvas.height);
-                        newImgData.data[pixelIndex] = r;
-                        newImgData.data[pixelIndex + 1] = r; // G
-                        newImgData.data[pixelIndex + 2] = r; // B
-                        newImgData.data[pixelIndex + 3] = 255; // Alpha
-                    }
-                }
-    
-                ctx.putImageData(newImgData, 0, 0);
             } else {
+                setNwidth(""); // Geçerli bir resim yoksa genişliği sıfırlayın
                 toast.error('Canvas üzerinde geçerli bir resim yok.', {
                     position: 'bottom-right',
                     autoClose: 2000,
@@ -124,6 +105,7 @@ function Uploader() {
             }
         }
     };
+    
     
     
     
@@ -332,7 +314,7 @@ function Uploader() {
             
                     // Resmi yeniden çiz
                     ctx.drawImage(img, 0, 0, width, height);
-                    
+
                     // State'leri güncelle
                     setPreviousSize({ width: previousWidth, height: previousHeight });
                     setNewSize({ width, height });
