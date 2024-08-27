@@ -114,11 +114,16 @@ function Uploader() {
     
     
     const bypercent = (value) => {
-        setPercent(value);
+        let percentValue = parseInt(value);
+        if (isNaN(percentValue) || percentValue < 0) {
+            percentValue = 1;
+        }
+        setPercent(percentValue);
+
         const canvas = canvasRef.current;
         if (canvas && canvas.width > 0 && canvas.height > 0) {
-            const newWidth = Math.floor(canvas.width * percent / 100);
-            const newHeight = Math.floor(canvas.height * percent / 100);
+            const newWidth = Math.floor(canvas.width * percentValue / 100);
+            const newHeight = Math.floor(canvas.height * percentValue / 100);
             setNwidth(newWidth);
             setNheight(newHeight);
         } else {
@@ -436,7 +441,6 @@ function Uploader() {
                     onClick={() => handleToggle('dimensions')}
                     style={{
                         padding: '10px 20px',
-                        borderRadius: '5px 0 0 5px',
                         border: '1px solid #ccc',
                         backgroundColor: activeButton === 'dimensions' ? '#111827' : '#030712',
                         opacity: activeButton === 'dimensions' ? '1' : '0.7',
@@ -447,10 +451,10 @@ function Uploader() {
                     By Dimensions
                 </button>
                 <button
+                    className='button-percentage'
                     onClick={() => handleToggle('percentage')}
                     style={{
                         padding: '10px 20px',
-                        borderRadius: '0 5px 5px 0',
                         border: '1px solid #ccc',
                         backgroundColor: activeButton === 'percentage' ? '#111827' : '#030712',
                         opacity: activeButton === 'percentage' ? '1' : '0.7',
@@ -468,6 +472,7 @@ function Uploader() {
 
   return (
     <main className="flex flex-col items-center">
+        <h1 className='title underline hover:decoration-sky-600 decoration-blue-400'>Image Resizer</h1>
         <div {...getRootProps()} className='dropzone'>
             <input {...getInputProps()} />        
         {image ?(
@@ -518,6 +523,7 @@ function Uploader() {
                 <input type = 'number'
                 className='input-percent'
                 placeholder='%'
+                min={1}
                 value={percent}
                 onChange={(e) => bypercent(e.target.value)}
                 
