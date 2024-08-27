@@ -437,7 +437,7 @@ function Uploader() {
                         padding: '10px 20px',
                         borderRadius: '5px 0 0 5px',
                         border: '1px solid #ccc',
-                        backgroundColor: activeButton === 'dimensions' ? '#444' : '#777',
+                        backgroundColor: activeButton === 'dimensions' ? '#598cec' : '#00509E',
                         color: activeButton === 'dimensions' ? '#fff' : '#ccc',
                         cursor: 'pointer'
                     }}
@@ -450,7 +450,7 @@ function Uploader() {
                         padding: '10px 20px',
                         borderRadius: '0 5px 5px 0',
                         border: '1px solid #ccc',
-                        backgroundColor: activeButton === 'percentage' ? '#444' : '#777',
+                        backgroundColor: activeButton === 'percentage' ? '#598cec' : '#00509E',
                         color: activeButton === 'percentage' ? '#fff' : '#ccc',
                         cursor: 'pointer'
                     }}
