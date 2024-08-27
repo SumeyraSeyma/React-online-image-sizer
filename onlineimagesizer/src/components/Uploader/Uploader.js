@@ -229,6 +229,17 @@ function Uploader() {
     };
 
     const downloadImage = () => {
+        if(activeToggle === 'percentage' && percent === ""|| activeToggle === 'dimensions' && Nwidth === "" || Nheight === ""){
+            toast.error('Please enter value', {
+                position: 'bottom-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }else{
         const canvas = canvasRef.current; 
         if (canvas && canvas.width > 0 && canvas.height > 0) {
             setProgress(25);
@@ -265,6 +276,7 @@ function Uploader() {
                 progress: undefined,
             });
         }
+    }
     };
 
     
