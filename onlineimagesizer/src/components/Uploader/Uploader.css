@@ -310,6 +310,17 @@
             flex-direction: column; /* Butonlar alt alta gelir */
             align-items:center; /* Butonlar solda hizalanır */
     }
+    .input-height{
+        margin-right: 2px;
+    }
+
+    .reset-button{
+        margin-right: 2px;
+    }
+
+    .input-percent{
+        margin-right: 2px;
+    }
   }
   
   
@@ -357,6 +368,18 @@
     .uploaded-row{
             width: 300px;
             flex-direction: column; /* Butonlar alt alta gelir */
+    }
+
+    .input-height{
+        margin-right: 2px;
+    }
+
+    .reset-button{
+        margin-right: 2px;
+    }
+
+    .input-percent{
+        margin-right: 2px;
     }
 
     .dropzone{
