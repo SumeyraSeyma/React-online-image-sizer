@@ -234,7 +234,7 @@ function Uploader() {
     };
 
     const downloadImage = () => {
-        if(activeToggle === 'percentage' && percent === ""|| activeToggle === 'dimensions' && Nwidth === "" || Nheight === ""){
+        if(activeToggle === 'percentage' && percent === ""|| activeToggle === 'dimensions' && Nwidth === "" || Nheight === "" || isNaN(Nwidth) || isNaN(Nheight) || Nwidth < 1 || Nheight < 1 || percent < 1 || isNaN(percent) || percent === ""){
             toast.error('Please enter value', {
                 position: 'bottom-right',
                 autoClose: 2000,
