@@ -537,19 +537,28 @@ function Uploader() {
             <button className='reset-button'onClick={resetFunc} >Reset</button>
 
 
-            <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',}} 
+            <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',
+                flexShrink: 0, /* İkonların küçülmesini engelleyin */
+                flexGrow: 0, /* İkonların büyümesini engelleyin */
+            }} 
             onClick={downloadImage} size={25} disabled={!image} className="download-button"/>
             
             <span className='upload-content'>
             <>
-            <FaFileImage className='fileimage' size={30}/>
+            <FaFileImage className='fileimage' size={30} style={{
+                flexShrink: 0, /* İkonların küçülmesini engelleyin */
+                flexGrow: 0, /* İkonların büyümesini engelleyin */
+            }}/>
             </>
                 {fileName}
                 <FaTrash
                 className={`delete-button ${isShaking ? 'shake' : ''}`}
                 id='delete-button'
                 size={25}
-                style={{cursor: !isDisabled ? 'not-allowed' : 'pointer',}}
+                style={{cursor: !isDisabled ? 'not-allowed' : 'pointer',
+                    flexShrink: 0, /* İkonların küçülmesini engelleyin */
+                    flexGrow: 0, /* İkonların büyümesini engelleyin */
+                }}
                 onClick={()=>handleDelete()}
                     
                 />
