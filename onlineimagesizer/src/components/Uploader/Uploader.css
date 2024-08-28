@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 2px dashed;
+    border: 2px dashed #b0e6cb;
     height: 380px;
     width: 800px;
     cursor: pointer;
@@ -17,6 +17,7 @@
     margin-bottom: 10px;
     font-style: italic;
     margin-top: 0px;
+    color: antiquewhite;
 }
 
 .uploaded-row{
@@ -25,7 +26,7 @@
     align-items: center;
     padding: 15px 65px;
     border-radius: 5px;
-    background-color: #afd0f3;
+    background-color: #b0e6cb;
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
@@ -48,6 +49,7 @@
 
 .droppp{
     font-style: italic;
+    color:#b0e6cb
 }
 
 #delete-button{
@@ -69,6 +71,7 @@
 
 .upload{
     opacity: 0.7;
+    color: #b0e6cb;
 }
 
 .upload:hover{
@@ -189,7 +192,7 @@
 }
 .progress-bar {
     height: 10px;
-    background-color: #afd0f3;
+    background-color: #b0e6cb;
     border-radius: 5px;
     transition: width 0.4s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);

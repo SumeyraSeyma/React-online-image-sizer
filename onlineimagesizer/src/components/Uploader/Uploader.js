@@ -472,7 +472,7 @@ function Uploader() {
 
   return (
     <main className="flex flex-col items-center">
-        <h1 className='title underline hover:decoration-sky-600 decoration-blue-400'>Image Resizer</h1>
+        <h1 className='title underline hover:decoration-emerald-500 decoration-emerald-200'>Image Resizer</h1>
         <div {...getRootProps()} className='dropzone'>
             <input {...getInputProps()} />        
         {image ?(
