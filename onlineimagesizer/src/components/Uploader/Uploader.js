@@ -537,7 +537,7 @@ function Uploader() {
             <button className='reset-button'onClick={resetFunc} >Reset</button>
 
 
-        <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',}} 
+            <FaDownload style={{cursor: !isDownDisabled ? 'not-allowed' : 'pointer',}} 
             onClick={downloadImage} size={25} disabled={!image} className="download-button"/>
             
             <span className='upload-content'>

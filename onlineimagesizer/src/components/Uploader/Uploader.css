@@ -240,6 +240,7 @@
 }
 
 .button-dimensions{
+    transition-duration: 300ms;
     box-shadow: 0 9px #999;
     border-radius: 15px;
 }
@@ -255,6 +256,7 @@
     transform: translateY(4px);
   }
 .button-percentage{
+    transition-duration: 300ms;
     box-shadow: 0 9px #999;
     border-radius: 15px;
 }
@@ -270,3 +272,4 @@
     transform: translateY(4px);
   }
   
+
