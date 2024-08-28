@@ -110,6 +110,7 @@
 }
 
 .resize-button{
+    width: auto;
     transition-duration: 300ms;
     background-color: #111827;
     display: inline-block;
@@ -140,6 +141,7 @@
   }
 
 .reset-button{
+    width: auto;
     transition-duration: 300ms;
     background-color: #111827;
     display: inline-block;
@@ -272,4 +274,95 @@
     transform: translateY(4px);
   }
   
+  @media (orientation: landscape) {
+    .App{
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y:hidden;
+    }
+    .uploaded-row{
+            width: 800px;
+    }
+  }
+  
+  @media (min-height: 1180px) and (max-height: 1365px) {
+    .App{
+        overflow-x: hidden;
+        overflow-y:hidden;
+    }
+    .uploaded-row{
+           width: 800px;
+    }
+  
+  }
+  
+  @media (min-height: 801px) and (max-height: 1179px) {
+    .App{
+        
+        overflow-x: hidden;
+        overflow-y:hidden;
+    }
+    .dropzone{
+        width: 300px;
+    }
+    .uploaded-row{
+            width: 200px;
+            flex-direction: column; /* Butonlar alt alta gelir */
+            align-items:center; /* Butonlar solda hizalanır */
+    }
+  }
+  
+  
+  @media(max-height: 600px){
+    .list{
+        max-height: 200px;
+    }
+  }
+  
+  @media(min-height: 1366px){
+    .App{
+        height: 100vh;
+        overflow-x: hidden;
+        overflow-y:hidden;
+    }
+  }
+  
+  @media(width: 1280px) and (height: 800px){
+    .App{
+        height: 800px;
+        overflow-x: hidden;
+        overflow-y:hidden;
+    }
+  }
+  
+  @media(min-width:814px) and (min-height:801px){
+    .list{
+        max-height: 400px;
+    }
+    #container{
+        max-height: 800px;
+  
+    }
+    .App{
+        height: 100vh;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .App{
+        height: 101vh;
+        overflow-x: hidden;
+        overflow-y:hidden;
+    }
+    .uploaded-row{
+            width: 300px;
+            flex-direction: column; /* Butonlar alt alta gelir */
+    }
+
+    .dropzone{
+        width: 300px;
+        height: 300px;
+    }
+    
+  }
 
