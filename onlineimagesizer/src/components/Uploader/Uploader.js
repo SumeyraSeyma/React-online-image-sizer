@@ -62,7 +62,9 @@ function Uploader() {
     
         if (newWidth === 1) {
             setNheight(1);
-        } else {
+        } else if(newWidth === 1920){
+            setNheight(1080);
+        } else{
             const canvas = canvasRef.current;
             if (canvas && canvas.width > 0 && canvas.height > 0) {
                 const aspectRatio = canvas.height / canvas.width;
