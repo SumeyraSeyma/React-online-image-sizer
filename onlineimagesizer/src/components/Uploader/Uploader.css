@@ -277,7 +277,7 @@
   
   @media (orientation: landscape) {
     .App{
-        height: 100vh;
+        height: 105vh;
         overflow-x: hidden;
         overflow-y:hidden;
     }
@@ -313,14 +313,18 @@
     }
     .input-height{
         margin-right: 2px;
+        margin-bottom: 1rem;
+        margin-top: 0.5rem;
     }
 
     .reset-button{
         margin-right: 2px;
+        margin-top: 0.5rem;
     }
 
     .input-percent{
         margin-right: 2px;
+        margin-bottom: 1rem;
     }
   }
   
@@ -362,7 +366,7 @@
 
   @media screen and (max-width: 767px) {
     .App{
-        height: 105vh;
+        height: 111vh;
         overflow-x: hidden;
         overflow-y:hidden;
     }
@@ -373,14 +377,18 @@
 
     .input-height{
         margin-right: 2px;
+        margin-bottom: 1rem;
+        margin-top: 0.5rem;
     }
 
     .reset-button{
         margin-right: 2px;
+        margin-top: 0.5rem;
     }
 
     .input-percent{
         margin-right: 2px;
+        margin-bottom: 1rem;
     }
 
     .dropzone{
