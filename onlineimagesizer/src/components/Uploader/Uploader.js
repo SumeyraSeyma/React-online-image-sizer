@@ -234,17 +234,24 @@ function Uploader() {
     };
 
     const downloadImage = () => {
-        if(activeToggle === 'percentage' && percent === ""|| activeToggle === 'dimensions' && Nwidth === "" || Nheight === "" || isNaN(Nwidth) || isNaN(Nheight) || Nwidth < 1 || Nheight < 1 || percent < 1 || isNaN(percent) || percent === ""){
-            toast.error('Please enter value', {
-                position: 'bottom-right',
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-        }else{
+        if (activeToggle === 'percentage') {
+            // Yüzde seçeneği aktifse, yüzde değerini kontrol et
+            if (percent === "" || isNaN(percent) || percent < 1) {
+                toast.error('Please enter a valid percentage value');
+                return;
+            }
+        } else if (activeToggle === 'dimensions') {
+            // Boyut seçeneği aktifse, genişlik ve yükseklik değerlerini kontrol et
+            if (Nwidth === "" || isNaN(Nwidth) || Nwidth < 1) {
+                toast.error('Please enter a valid width');
+                return;
+            }
+            if (Nheight === "" || isNaN(Nheight) || Nheight < 1) {
+                toast.error('Please enter a valid height');
+                return;
+            }
+        }
+
         const canvas = canvasRef.current; 
         if (canvas && canvas.width > 0 && canvas.height > 0) {
             setProgress(25);
@@ -282,7 +289,7 @@ function Uploader() {
             });
         }
     }
-    };
+    
 
     
 
