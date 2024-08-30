@@ -550,7 +550,16 @@ function Uploader() {
                 flexGrow: 0, /* İkonların büyümesini engelleyin */
             }}/>
             </>
-                {fileName}
+            <span style={{
+                flexGrow: 1, /* Alanın kalanını kullanması için */
+                marginLeft: '10px', /* İkon ile yazı arasında boşluk bırakır */
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                width: '70px',
+            }}>
+            {fileName}
+            </span>
                 <FaTrash
                 className={`delete-button ${isShaking ? 'shake' : ''}`}
                 id='delete-button'
