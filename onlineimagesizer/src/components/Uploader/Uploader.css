@@ -362,7 +362,7 @@
 
   @media screen and (max-width: 767px) {
     .App{
-        height: 101vh;
+        height: 105vh;
         overflow-x: hidden;
         overflow-y:hidden;
     }
