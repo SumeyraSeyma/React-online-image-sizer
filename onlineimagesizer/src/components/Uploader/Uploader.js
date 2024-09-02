@@ -120,6 +120,17 @@ function Uploader() {
         if (isNaN(percentValue) || percentValue < 0) {
             percentValue = 1;
         }
+        if (percentValue > 200) {
+            toast.error('Percentage value must be less than 200', {
+                position: 'bottom-right',
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
         setPercent(percentValue);
 
         const canvas = canvasRef.current;
@@ -533,6 +544,7 @@ function Uploader() {
                 className='input-percent'
                 placeholder='%'
                 min={1}
+                max={200}
                 value={percent}
                 onChange={(e) => bypercent(e.target.value)}
                 
